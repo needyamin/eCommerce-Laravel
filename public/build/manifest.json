@@ -1,0 +1,33 @@
+{
+  "public/template/user/assets/css/style-prefix.css": {
+    "file": "assets/style-prefix-ME6b2HAV.css",
+    "src": "public/template/user/assets/css/style-prefix.css"
+  },
+  "public/template/user/assets/js/script.js": {
+    "file": "assets/script-IyzmdmkY.js",
+    "name": "script",
+    "src": "public/template/user/assets/js/script.js",
+    "isDynamicEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-l0sNRNKZ.js",
+    "name": "app",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-tAQYrBCq.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "resources/css/app.css"
+    ],
+    "dynamicImports": [
+      "public/template/user/assets/js/script.js"
+    ],
+    "css": [
+      "assets/app-BGfbWLrO.css"
+    ]
+  }
+}

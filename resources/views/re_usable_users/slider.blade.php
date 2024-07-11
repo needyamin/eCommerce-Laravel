@@ -1,0 +1,3 @@
+@section('slider')
+<!-- slider -->
+@endsection
