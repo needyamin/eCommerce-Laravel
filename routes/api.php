@@ -29,4 +29,8 @@ Route::delete('/cart/{productId}', [CartController::class, 'removeFromCart']);
 Route::patch('/cart/{productId}', [CartController::class, 'updateQuantity']);
 Route::post('/checkout', [CartController::class, 'checkout']);
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon']);
+// Route::post('/save-session-data', [CartController::class, 'store_checkout_session']);
+Route::post('/watchlist', [CartController::class, 'addToWatchlist']);
+Route::get('/watchlist', [CartController::class, 'getWatchlist']);
+
 

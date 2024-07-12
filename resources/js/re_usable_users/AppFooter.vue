@@ -276,7 +276,7 @@
             <img src="template/user/assets/images/payment.png" alt="payment method" class="payment-img">
     
             <p class="copyright">
-              Copyright &copy; <a href="#">Anon</a> all rights reserved.
+              Copyright &copy; <a href="https://otitheesoftwaresolution.com/" target="_blank">Otithee Software Solution Limited</a> all rights reserved.
             </p>
     
           </div>

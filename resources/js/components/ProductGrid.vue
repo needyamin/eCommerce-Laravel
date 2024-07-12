@@ -6,12 +6,15 @@
      <div class="product-grid container">
        <div class="showcase" v-for="product in products" :key="product.id">
         <div class="showcase-banner">
+          
+    <router-link to="/checkout">
          <img src="template/user/assets/images/products/jacket-4.jpg" alt="{{ product.name }}" class="product-img default">
          <img src="template/user/assets/images/products/jacket-4.jpg" alt="{{ product.name }}" width="300" class="product-img hover">
- 
-         <p class="showcase-badge">{{ product.discount }}% Dynamic</p>
+    </router-link>
+
+         <p class="showcase-badge">{{ product.discount ?? '0'}}% Dynamic</p>
          <div class="showcase-actions">
-           <button class="btn-action">
+          <button class="btn-action" @click="addToWatchlist(product.id, 1)">
              <ion-icon name="heart-outline" role="img" class="md hydrated" aria-label="heart outline"></ion-icon>
            </button>
            <button class="btn-action">
@@ -78,6 +81,7 @@
            console.error('There was an error fetching the cart!', error);
          });
      },
+
      addToCartHandler(productId, quantity) {
        axios.post('/api/cart', { product_id: productId, quantity: quantity })
          .then(response => {
@@ -96,11 +100,27 @@
            console.error('There was an error adding the product to the cart!', error);
            alertify.error('Failed to add item to cart');
          });
-     }
-   },
+     },
+   
+   addToWatchlist(productId, quantity) {
+      axios.post('/api/watchlist', { product_id: productId, quantity: quantity })
+        .then(response => {
+          if (response.data && response.data.status === 'success') {
+            alertify.success('Item added to watchlist');
+            // Optionally, update local state or perform additional actions after success
+          } else {
+            console.error('Failed to add item to watchlist:', response.data.message);
+            alertify.error('Failed to add item to watchlist');
+          }
+        })
+        .catch(error => {
+          console.error('Error adding item to watchlist:', error);
+          alertify.error('Failed to add item to watchlist');
+        });
+    }
+  },
    computed: {
      ...mapGetters(['totalItemsInCart']),
    }
  };
  </script>
- 

@@ -42,8 +42,8 @@
   
           <div class="header-top-actions">
   
-            <a href="#" class="menu"> Sign In </a>
-            <a href="#" class="menu"> Admin Login </a>
+            <a href="login" class="menu"> Sign In </a>
+            <a href="register" class="menu"> Admin Login </a>
        
   
           </div>

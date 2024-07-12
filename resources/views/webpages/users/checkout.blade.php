@@ -14,22 +14,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
 @endsection
 
+
+@vite('resources/js/app.js')
+
+
+
 <div id="app" class="container mt-5">
-        <h1 align="center">Shopping Cart</h1>
-        
-        <h2>Products</h2>
-        <div class="row">
-            <div class="col-md-4" v-for="product in products" :key="product.id">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">@{{ product.name }}</h5>
-                        <p class="card-text">Price: $@{{ product.price }}</p>
-                        <input type="hidden" v-model.number="product.quantity" min="1">
-                        <button class="btn btn-primary" @click="addToCart(product.id, product.quantity)">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <h1 align="center">Shopping Cart</h1>
 
         <h2>Cart</h2>
         <div class="table-responsive">
@@ -47,12 +39,12 @@
                     <tr v-for="item in cart" :key="item.id">
                         <td>@{{ item.name }}</td>
                         <td>$@{{ parseFloat(item.price).toFixed(2) }}</td>
-                        <td>
+                        <td style="width:15%">
                             <input type="number" v-model.number="item.quantity" @change="updateQuantity(item.id, item.quantity)" min="1">
                         </td>
                         <td>$@{{ parseFloat(item.price * item.quantity).toFixed(2) }}</td>
                         <td>
-                            <button class="btn btn-danger" @click="removeFromCart(item.id)">Remove</button>
+                            <button class="btn-sm btn btn-danger" @click="removeFromCart(item.id)">Remove</button>
                         </td>
                     </tr>
                 </tbody>
@@ -103,6 +95,7 @@ new Vue({
                     console.error('There was an error fetching the products!', error);
                 });
         },
+        
         getCart() {
             console.log('Fetching cart...');
             axios.get('/api/cart')
@@ -119,6 +112,7 @@ new Vue({
                 .catch(error => {
                     console.error('There was an error fetching the cart!', error);
                 });
+                
         },
 
         // add to cart
@@ -170,6 +164,10 @@ new Vue({
         updateQuantity(productId, quantity) {
             console.log(`Updating quantity: productId=${productId}, quantity=${quantity}`);
             
+              // Validate the quantity to ensure it is an integer and at least 1
+             quantity = Math.max(Math.round(quantity), 1);
+
+
             // Check if quantity is less than 1
             if (quantity < 1) {
                 // Prompt user for confirmation to remove item from cart
@@ -226,9 +224,8 @@ checkout() {
     
     // Prepare data to send in the checkout request
     let checkoutData = {
-
-        cartItems: this.cart,    // Assuming this.cart contains items in the cart
-        cartTotal: this.cartTotal  // Assuming this.cartTotal is the total amount
+        cartItems: this.cart,    
+        cartTotal: this.cartTotal 
     };
 
     axios.post('/api/checkout', checkoutData)
@@ -236,7 +233,6 @@ checkout() {
             // Clear cart and reset cart total after successful checkout
             this.cart = [];
             this.cartTotal = 0;
-
             console.log('Checkout successful:', response.data); // Log the response data if needed
             alertify.success('Checkout successful!');
         })

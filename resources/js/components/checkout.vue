@@ -6,22 +6,44 @@
         <div class="card-body">
           <div v-if="cart.length > 0">
             <h2>Cart</h2>
-            <div v-for="item in cart" :key="item.id">
-              <h5 class="card-title">
-                {{ item.name }} - Quantity: {{ item.quantity }} -
-                <p class="card-text"> Total: ${{ item.price * item.quantity }} </p>
-                <button class="btn btn-primary" @click="removeFromCart(item.id)">Remove</button>
-              </h5>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in cart" :key="item.id">
+                    <td>{{ item.name }}</td>
+                    <td>${{ parseFloat(item.price).toFixed(2) }}</td>
+                    <td style="width:15%">
+                      <input type="number" v-model.number="item.quantity" @change="updateQuantity(item.id, item.quantity)" min="1">
+                    </td>
+                    <td>${{ parseFloat(item.price * item.quantity).toFixed(2) }}</td>
+                    <td>
+                      <button class="btn-sm btn btn-danger" @click="removeFromCart(item.id)">Remove</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <p>Total Items in Cart: {{ totalItemsInCart }}</p>
-            <p>Cart Total: ${{ cartTotal }}</p>
-          </div>
 
-      
+            <h3>Total: ${{ cartTotal }} bdt</h3>
 
-          <!-- Checkout Button -->
-          <div>
-            <button class="btn btn-primary" @click="checkout">Checkout</button>
+            <!-- Coupon Code Input -->
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" v-model="couponCode" placeholder="Enter coupon code" style="width:60%; flex:1">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" @click="applyCoupon">Apply Coupon</button>
+              </div>
+            </div>
+
+            <button class="btn btn-success" @click="checkout">Checkout</button>
           </div>
         </div>
       </div>
@@ -118,6 +140,9 @@ export default {
     updateQuantity(productId, quantity) {
       console.log(`Updating quantity: productId=${productId}, quantity=${quantity}`);
       
+      // Validate the quantity to ensure it is an integer and at least 1
+      quantity = Math.max(Math.round(quantity), 1);
+
       if (quantity < 1) {
         if (confirm('Are you sure you want to remove this item from your cart?')) {
           axios.delete(`/api/cart/${productId}`)
