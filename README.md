@@ -11,3 +11,6 @@ Above `public/template` folder has three folder name, `admin` is for Admin Panel
 ![route](https://github.com/user-attachments/assets/ce1c1209-1f4f-4626-8ad6-1f626b9288d7)
 
 Above `admin.php` is admin dashboard 'admin/` prefix.
+
+# #3 Views
+![views](https://github.com/user-attachments/assets/7b67a62b-27b7-4be5-886b-3c6dbdd7cc58)
