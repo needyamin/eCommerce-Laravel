@@ -1,5 +1,4 @@
 
-
 :root {
 
   /**
@@ -130,12 +129,9 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 
-
-
-
-/*-----------------------------------*\
-  #REUSED STYLE
-\*-----------------------------------*/
+/* ----------------------------------- *\
+  # REUSED STYLE
+\* ----------------------------------- */
 
 .container { padding: 0 15px; }
 
@@ -169,16 +165,11 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 
-
-
-
 /*-----------------------------------*\
-  #MAIN
+  # MAIN
 \*-----------------------------------*/
 
-/**
- * overlay 
- */
+/*** overlay */
 
 .overlay {
   position: fixed;
@@ -201,10 +192,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 
-
-/**
- * MODAL 
- */
+/*** MODAL  */
 
 .modal {
   position: fixed;
@@ -246,7 +234,6 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
     visibility: visible;
     pointer-events: all;
   }
-
 }
 
 @keyframes popup {
@@ -366,8 +353,6 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .btn-newsletter:hover { background: var(--salmon-pink); }
-
-
 
 
 

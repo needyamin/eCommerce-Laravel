@@ -21,10 +21,13 @@
                   <tr v-for="item in cart" :key="item.id">
                     <td>{{ item.name }}</td>
                     <td>${{ parseFloat(item.price).toFixed(2) }}</td>
+
                     <td style="width:15%">
-                      <input type="number" v-model.number="item.quantity" @change="updateQuantity(item.id, item.quantity)" min="1">
+                      <input type="number" v-model.number="item.quantity"
+                        @change="updateQuantity(item.id, item.quantity)" min="1">
                     </td>
                     <td>${{ parseFloat(item.price * item.quantity).toFixed(2) }}</td>
+
                     <td>
                       <button class="btn-sm btn btn-danger" @click="removeFromCart(item.id)">Remove</button>
                     </td>
@@ -37,7 +40,8 @@
 
             <!-- Coupon Code Input -->
             <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="couponCode" placeholder="Enter coupon code" style="width:60%; flex:1">
+              <input type="text" class="form-control" v-model="couponCode" placeholder="Enter coupon code"
+                style="width:60%; flex:1">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button" @click="applyCoupon">Apply Coupon</button>
               </div>
@@ -62,12 +66,15 @@ export default {
       totalItemsAdded: 0,
     };
   },
+
   created() {
     console.log('Vue instance created');
     this.getProducts();
     this.getCart();
   },
+
   methods: {
+
     getProducts() {
       console.log('Fetching products...');
       axios.get('/api/products')
@@ -82,6 +89,7 @@ export default {
           console.error('There was an error fetching the products!', error);
         });
     },
+
     getCart() {
       console.log('Fetching cart...');
       axios.get('/api/cart')
@@ -98,6 +106,7 @@ export default {
           console.error('There was an error fetching the cart!', error);
         });
     },
+
     addToCart(productId, quantity) {
       console.log(`Adding to cart: productId=${productId}, quantity=${quantity}`);
       axios.post('/api/cart', { product_id: productId, quantity: quantity })
@@ -118,6 +127,7 @@ export default {
           alertify.error('Failed to add item to cart');
         });
     },
+
     removeFromCart(productId) {
       console.log(`Removing from cart: productId=${productId}`);
       axios.delete(`/api/cart/${productId}`)
@@ -137,9 +147,11 @@ export default {
           alertify.error('Failed to remove item from cart');
         });
     },
+
+
     updateQuantity(productId, quantity) {
       console.log(`Updating quantity: productId=${productId}, quantity=${quantity}`);
-      
+
       // Validate the quantity to ensure it is an integer and at least 1
       quantity = Math.max(Math.round(quantity), 1);
 
@@ -186,9 +198,11 @@ export default {
           });
       }
     },
+
+
     checkout() {
       console.log('Checking out...');
-      
+
       let checkoutData = {
         cartItems: this.cart,
         cartTotal: this.cartTotal
@@ -207,9 +221,10 @@ export default {
           alertify.error('Checkout failed');
         });
     },
+
+
     applyCoupon() {
       console.log('Applying coupon:', this.couponCode);
-      
       axios.post('/api/apply-coupon', { coupon_code: this.couponCode })
         .then(response => {
           if (response.data && typeof response.data.cart === 'object') {
@@ -227,14 +242,15 @@ export default {
           alertify.error('Failed to apply coupon');
         });
     },
+
     calculateCartTotal() {
       this.cartTotal = this.cart.reduce((total, item) => {
         return total + (item.price * item.quantity);
       }, 0);
-      
       this.cartTotal = parseFloat(this.cartTotal.toFixed(2));
     }
   },
+
   computed: {
     totalItemsInCart() {
       return this.cart.reduce((total, item) => {
@@ -250,7 +266,4 @@ export default {
 
 <style scoped>
 /* Your styles here */
-
-
-
 </style>
