@@ -5,9 +5,12 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Product\ProductController;
 
-// Route::get('/{any}', function () {
-//     return view('webpages.users.home'); 
-// })->where('any', '.*');
+# Use the shortcut Ctrl + K followed by Ctrl + F (Windows/Linux)
+
+
+Route::get('/{any}', function () {
+    return view('webpages.users.home'); 
+})->where('any', '.*');
 
 #export NODE_OPTIONS=--max-old-space-size=8192 
 ##### php artisan serve --host 192.168.68.196 --port 8000
