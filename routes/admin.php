@@ -4,12 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Product\ProductController;
 
-
 # Prefix all routes with 'Admin prefix for Dashboard'
 // Route::prefix('admin')->group(function () {
 // Routes links
 // });
-
 
 Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
 #Route::resource('product', ProductController::class);
@@ -24,5 +22,7 @@ Route::resource('product', ProductController::class)->names([
         'update' => 'dashboard.update',
         'destroy' => 'dashboard.destroy',
     ]);
+
+
 
 

@@ -1,16 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Product\ProductController;
 
 # Use the shortcut Ctrl + K followed by Ctrl + F (Windows/Linux)
 
 
-Route::get('/{any}', function () {
-    return view('webpages.users.home'); 
-})->where('any', '.*');
+// Route::get('/{any}', function () {
+//     return view('webpages.users.home'); 
+// })->where('any', '.*');
 
 #export NODE_OPTIONS=--max-old-space-size=8192 
 ##### php artisan serve --host 192.168.68.196 --port 8000
@@ -23,12 +22,12 @@ Route::get('/{any}', function () {
 
 Auth::routes();
 
-
 // eCommerce Homepage
-Route::get('/', function () { return view('webpages.users.home');});
+Route::get('/', [ProductController::class, 'testing'])->name('testing');
 
 // eCommerce Shopping Cart Page
 Route::get('/cart', function () { return view('webpages.users.checkout');});
+
 
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {

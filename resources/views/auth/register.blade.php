@@ -1,4 +1,8 @@
 @extends('layouts.users')
+@section('title', 'Register')
+@section('content')
+@extends('re_usable_users.header')
+@extends('re_usable_users.slider')
 
 @section('content')
 <div class="container">
@@ -74,4 +78,9 @@
         </div>
     </div>
 </div>
+
+<br>
+@extends('re_usable_users.sidebar')
+@extends('re_usable_users.footer')
 @endsection
+

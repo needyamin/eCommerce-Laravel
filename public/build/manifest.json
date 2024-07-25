@@ -6,12 +6,15 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-C-ZyntwE.js",
+    "file": "assets/app-YTLJ-_4p.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+    "imports": [
+      "resources/css/app.css"
+    ],
     "css": [
-      "assets/app-DEgS4RJT.css"
+      "assets/app-C1t8VLuU.css"
     ]
   }
 }

@@ -54,7 +54,7 @@ class CartController extends Controller
         // Add new product to watchlist
         $watchlist[$productId] = [
             'id' => $productId,
-            'name' => $product->name,
+            'product_name' => $product->product_name,
             'price' => $product->price,
             'quantity' => $quantity,
             'stock_quantity' => $product->stock_quantity,
@@ -89,7 +89,7 @@ class CartController extends Controller
         } else {
             $cart[$productId] = [
                 'id' => $productId,
-                'name' => $product->name,
+                'product_name' => $product->product_name,
                 'price' => $product->price,
                 'quantity' => $quantity,
                 'stock_quantity' => $product->stock_quantity,
@@ -132,7 +132,7 @@ class CartController extends Controller
 
          // Process each cart item
        foreach ($cartItems as $item) {
-          $name = $item['name'];  
+          $product_name = $item['product_name'];  
           $product_id = $item['id'];  
           $price = $item['price'];  
           $quantity = $item['quantity'];  
@@ -223,7 +223,7 @@ class CartController extends Controller
  
           // Process each cart item
         foreach ($cartItems as $item) {
-           $name = $item['name'];  
+           $product_name = $item['product_name'];  
            $product_id = $item['id'];  
            $price = $item['price'];  
            $quantity = $item['quantity'];  

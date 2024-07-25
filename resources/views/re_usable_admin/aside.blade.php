@@ -32,7 +32,7 @@
 
 				<ul id="product" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar"
 					style="margin-left:15px;">
-					<li class="sidebar-item"><a class="sidebar-link" href="/pages-sign-in"><i class="align-middle"
+					<li class="sidebar-item"><a class="sidebar-link" href="{{ route('admin.dashboard.index') }}"><i class="align-middle"
 								data-feather="corner-down-right"></i> All Products <span
 								class="sidebar-badge badge bg-primary">0</span></a> </li>
 					<li class="sidebar-item"><a class="sidebar-link" href="{{ route('admin.dashboard.create') }}"><i

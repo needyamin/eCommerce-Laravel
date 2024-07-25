@@ -5,280 +5,289 @@
 @extends('re_usable_users.slider')
 
 @section('shoping-cart-scripts')
-<!-- Add Vue CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Add jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- alertfy -->
+<!-- alertify -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
 @endsection
 
-
 @vite('resources/js/app.js')
 
-
-
 <div id="app" class="container mt-5">
-
     <h1 align="center">Shopping Cart</h1>
 
-        <h2>Cart</h2>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="item in cart" :key="item.id">
-                        <td>@{{ item.name }}</td>
-                        <td>$@{{ parseFloat(item.price).toFixed(2) }}</td>
-                        <td style="width:15%">
-                            <input type="number" v-model.number="item.quantity" @change="updateQuantity(item.id, item.quantity)" min="1">
-                        </td>
-                        <td>$@{{ parseFloat(item.price * item.quantity).toFixed(2) }}</td>
-                        <td>
-                            <button class="btn-sm btn btn-danger" @click="removeFromCart(item.id)">Remove</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <h2>Cart</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Cart items will be injected here -->
+            </tbody>
+        </table>
+    </div>
 
-        <h3>Total: $@{{ cartTotal }} bdt</h3>
+    <h3>Total: $<span id="cart-total">0.00</span> bdt</h3>
 
     <!-- Coupon Code Input -->
     <div class="input-group mb-3">
-        <input type="text" class="form-control" v-model="couponCode" placeholder="Enter coupon code" style="width:60%; flex:1">
+        <input type="text" class="form-control" id="coupon-code" placeholder="Enter coupon code" style="width:60%; flex:1">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="applyCoupon">Apply Coupon</button>
+            <button class="btn btn-outline-secondary" type="button" id="apply-coupon">Apply Coupon</button>
         </div>
     </div>
 
-
-     <button class="btn btn-success" @click="checkout">Checkout</button>
-    </div>
+    <button class="btn btn-success" id="checkout">Checkout</button>
+</div>
 
 <script>
-    
-new Vue({
-    el: '#app',
-    data: {
-        products: [],
-        cart: [],
-        cartTotal: 0,
-        couponCode:0,
-    },
-    created() {
-        console.log('Vue instance created');
-        this.getProducts();
-        this.getCart();
-    },
-    methods: {
-        getProducts() {
-            console.log('Fetching products...');
-            axios.get('/api/products')
-                .then(response => {
-                    this.products = response.data.map(product => ({
-                        ...product,
-                        quantity: 1 // Initialize quantity for each product
-                    }));
-                    console.log('Products fetched:', this.products);
-                })
-                .catch(error => {
-                    console.error('There was an error fetching the products!', error);
-                });
-        },
-        
-        getCart() {
+    $(document).ready(function() {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Function to fetch and render the cart items
+        function getCart() {
             console.log('Fetching cart...');
-            axios.get('/api/cart')
-                .then(response => {
-                    if (response.data && typeof response.data === 'object') {
-                        // Convert response object to an array
-                        this.cart = Object.values(response.data);
-                        this.calculateCartTotal();
-                        console.log('Cart fetched:', this.cart);
+            $.ajax({
+                url: '/api/cart',
+                method: 'GET',
+                success: function(response) {
+                    if (response && typeof response === 'object') {
+                        const cart = Object.values(response);
+                        renderCartItems(cart);
+                        calculateCartTotal(cart);
+                        console.log('Cart fetched:', cart);
                     } else {
-                        console.error('Response data is not in expected format:', response.data);
+                        console.error('Response data is not in expected format:', response);
                     }
-                })
-                .catch(error => {
-                    console.error('There was an error fetching the cart!', error);
-                });
-                
-        },
-
-        // add to cart
-        addToCart(productId, quantity) {
-            console.log(`Adding to cart: productId=${productId}, quantity=${quantity}`);
-            axios.post('/api/cart', { product_id: productId, quantity: quantity })
-                .then(response => {
-                    if (response.data && typeof response.data.cart === 'object') {
-                        // Convert response object to an array
-                        this.cart = Object.values(response.data.cart);
-                        console.log('Item added to cart:', this.cart);
-                        this.calculateCartTotal();
-                        alertify.success('Item added to cart');
-                    } else {
-                        console.error('Response data is not in expected format:', response.data.cart);
-                        alertify.error('Failed to add item to cart');
-                    }
-                })
-                .catch(error => {
-                    console.error('There was an error adding the product to the cart!', error);
-                    alertify.error('Failed to add item to cart');
-                });
-        },
-
-        // remove FormCart
-        removeFromCart(productId) {
-            console.log(`Removing from cart: productId=${productId}`);
-            axios.delete(`/api/cart/${productId}`)
-                .then(response => {
-                    if (response.data && typeof response.data.cart === 'object') {
-                        // Convert response object to an array
-                        this.cart = Object.values(response.data.cart);
-                        console.log('Item removed from cart:', this.cart);
-                        this.calculateCartTotal();
-                        alertify.success('Item removed from cart');
-                    } else {
-                        console.error('Response data is not in expected format:', response.data.cart);
-                        alertify.error('Failed to remove item from cart');
-                    }
-                })
-                .catch(error => {
-                    console.error('There was an error removing the product from the cart!', error);
-                    alertify.error('Failed to remove item from cart');
-                });
-        },
-        
-       
-
-        updateQuantity(productId, quantity) {
-            console.log(`Updating quantity: productId=${productId}, quantity=${quantity}`);
-            
-              // Validate the quantity to ensure it is an integer and at least 1
-             quantity = Math.max(Math.round(quantity), 1);
-
-
-            // Check if quantity is less than 1
-            if (quantity < 1) {
-                // Prompt user for confirmation to remove item from cart
-                if (confirm('Are you sure you want to remove this item from your cart?')) {
-                    // Perform axios delete request to remove item from cart
-                    axios.delete(`/api/cart/${productId}`)
-                        .then(response => {
-                            if (response.data && typeof response.data.cart === 'object') {
-                                this.cart = Object.values(response.data.cart);
-                                console.log('Item removed from cart:', this.cart);
-                                this.calculateCartTotal();
-                                alertify.success('Item removed from cart');
-                            } else {
-                                console.error('Response data is not in expected format:', response.data.cart);
-                                alertify.error('Failed to remove item from cart');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('There was an error removing the item from cart!', error);
-                            alertify.error('Failed to remove item from cart');
-                        });
-                } else {
-                    // Reset quantity to 1 if user cancels
-                    let item = this.cart.find(item => item.id === productId);
-                    if (item) item.quantity = 1;
+                },
+                error: function(xhr) {
+                    console.error('There was an error fetching the cart!', xhr);
                 }
-            } else {
-                // Find the item in the cart and update the quantity locally
-                let item = this.cart.find(item => item.id === productId);
-                if (item) item.quantity = quantity;
+            });
+        }
 
-                // Perform axios patch request to update quantity on server
-                axios.patch(`/api/cart/${productId}`, { quantity: quantity })
-                    .then(response => {
-                        if (response.data && response.data.status === 'success') {
-                            console.log('Quantity updated:', response.data.cart);
-                            this.calculateCartTotal();
-                            alertify.success('Quantity updated');
-                        } else {
-                            console.error('Response data is not in expected format:', response.data);
-                            alertify.error('Failed to update quantity');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There was an error updating the product quantity!', error);
-                        alertify.error('Failed to update quantity');
-                    });
-            }
-        },
+        // Function to fetch and render the watchlist
+        function fetchWatchlist() {
+            console.log('Fetching watchlist...');
+            $.ajax({
+                url: '/api/watchlist',
+                method: 'GET',
+                success: function(response) {
+                    if (response && typeof response === 'object') {
+                        const watchlist = Object.values(response);
+                        console.log('Watchlist:', watchlist);
+                        const totalItems = watchlist.length; 
+                        document.getElementById('total-watchlist-items').innerText = totalItems;
+                        // Update watchlist UI if needed
+                    } else {
+                        console.error('Response data is not in expected format:', response);
+                    }
+                },
+                error: function(xhr) {
+                    console.error('There was an error fetching the watchlist!', xhr);
+                }
+            });
+        }
 
+        // Function to update the cart count
+        function updateCartCount() {
+            console.log('Updating cart count...');
+            $.ajax({
+                url: '/api/cart',
+                method: 'GET',
+                success: function(response) {
+                    if (response && typeof response === 'object') {
+                        const cartItems = Object.values(response);
+                        const totalItems = cartItems.reduce((total, item) => total + parseInt(item.quantity, 10), 0);
+                        $('#total-cart-items').text(totalItems);
+                    } else {
+                        console.error('Response data is not in expected format:', response);
+                    }
+                },
+                error: function(xhr) {
+                    console.error('There was an error fetching the cart count!', xhr);
+                }
+            });
+        }
 
-checkout() {
-    console.log('Checking out...');
-    
-    // Prepare data to send in the checkout request
-    let checkoutData = {
-        cartItems: this.cart,    
-        cartTotal: this.cartTotal 
-    };
+        function renderCartItems(cart) {
+            const cartItemsContainer = $('#cart-items');
+            cartItemsContainer.empty();
+            cart.forEach(item => {
+                const row = `
+                    <tr data-id="${item.id}">
+                        <td>${item.name}</td>
+                        <td>$${parseFloat(item.price).toFixed(2)}</td>
+                        <td style="width:15%">
+                            <input type="number" class="item-quantity" value="${item.quantity}" min="1">
+                        </td>
+                        <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                        <td>
+                            <button class="btn-sm btn btn-danger remove-from-cart">Remove</button>
+                        </td>
+                    </tr>
+                `;
+                cartItemsContainer.append(row);
+            });
+        }
 
-    axios.post('/api/checkout', checkoutData)
-        .then(response => {
-            // Clear cart and reset cart total after successful checkout
-            this.cart = [];
-            this.cartTotal = 0;
-            console.log('Checkout successful:', response.data); // Log the response data if needed
-            alertify.success('Checkout successful!');
-        })
-        .catch(error => {
-            console.error('There was an error during checkout!', error);
-            alertify.error('Checkout failed');
-        });
-},
+        function calculateCartTotal(cart) {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            $('#cart-total').text(total.toFixed(2));
+        }
 
-
-        applyCoupon() {
-            console.log('Applying coupon:', this.couponCode);
-            // Replace with your API call to apply coupon
-            // Example: Assume the API returns updated cart with coupon applied
-            axios.post('/api/apply-coupon', { coupon_code: this.couponCode })
-                .then(response => {
-                    if (response.data && typeof response.data.cart === 'object') {
-                        // Convert response object to an array
-                        this.cart = Object.values(response.data.cart);
-                        console.log('Cart with coupon applied:', this.cart);
-                        this.calculateCartTotal();
+        function applyCoupon() {
+            const couponCode = $('#coupon-code').val();
+            console.log('Applying coupon:', couponCode);
+            $.ajax({
+                url: '/api/apply-coupon',
+                method: 'POST',
+                data: { coupon_code: couponCode },
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                success: function(response) {
+                    if (response && typeof response.cart === 'object') {
+                        const cart = Object.values(response.cart);
+                        renderCartItems(cart);
+                        calculateCartTotal(cart);
                         alertify.success('Coupon applied successfully');
                     } else {
-                        console.error('Response data is not in expected format:', response.data.cart);
+                        console.error('Response data is not in expected format:', response.cart);
                         alertify.error('Failed to apply coupon');
                     }
-                })
-                .catch(error => {
-                    console.error('There was an error applying the coupon:', error);
+                },
+                error: function(xhr) {
+                    console.error('There was an error applying the coupon:', xhr);
                     alertify.error('Failed to apply coupon');
-                });
-        },
-        
-        calculateCartTotal() {
-            this.cartTotal = this.cart.reduce((total, item) => {
-                return total + (item.price * item.quantity);
-            }, 0);
-            
-            // Format the cart total to two decimal places
-            this.cartTotal = parseFloat(this.cartTotal.toFixed(2));
+                }
+            });
         }
-    
-    
-    }});
-</script>
 
+        function checkout() {
+            console.log('Checking out...');
+            const cart = [];
+            $('#cart-items tr').each(function() {
+                const id = $(this).data('id');
+                const quantity = $(this).find('.item-quantity').val();
+                cart.push({ id, quantity });
+            });
+
+            $.ajax({
+                url: '/api/checkout',
+                method: 'POST',
+                data: { cartItems: cart, cartTotal: $('#cart-total').text() },
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                success: function(response) {
+                    $('#cart-items').empty();
+                    $('#cart-total').text('0.00');
+                    alertify.success('Checkout successful!');
+                },
+                error: function(xhr) {
+                    console.error('There was an error during checkout!', xhr);
+                    alertify.error('Checkout failed');
+                }
+            });
+        }
+
+        // Event listeners
+        $('#apply-coupon').click(applyCoupon);
+        $('#checkout').click(checkout);
+
+        $('#cart-items').on('change', '.item-quantity', function() {
+            const row = $(this).closest('tr');
+            const productId = row.data('id');
+            const quantity = $(this).val();
+
+            if (quantity < 1) {
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    $.ajax({
+                        url: `/api/cart/${productId}`,
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': csrfToken },
+                        success: function(response) {
+                            if (response && typeof response.cart === 'object') {
+                                const cart = Object.values(response.cart);
+                                renderCartItems(cart);
+                                calculateCartTotal(cart);
+                                alertify.success('Item removed from cart');
+                            } else {
+                                console.error('Response data is not in expected format:', response.cart);
+                                alertify.error('Failed to remove item from cart');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('There was an error removing the item from the cart!', xhr);
+                            alertify.error('Failed to remove item from cart');
+                        }
+                    });
+                } else {
+                    $(this).val(1);
+                }
+            } else {
+                $.ajax({
+                    url: `/api/cart/${productId}`,
+                    method: 'PATCH',
+                    data: { quantity: quantity },
+                    headers: { 'X-CSRF-TOKEN': csrfToken },
+                    success: function(response) {
+                        if (response && response.status === 'success') {
+                            const cart = Object.values(response.cart);
+                            renderCartItems(cart);
+                            calculateCartTotal(cart);
+                            alertify.success('Quantity updated');
+                        } else {
+                            console.error('Response data is not in expected format:', response);
+                            alertify.error('Failed to update quantity');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('There was an error updating the product quantity!', xhr);
+                        alertify.error('Failed to update quantity');
+                    }
+                });
+            }
+        });
+
+        $('#cart-items').on('click', '.remove-from-cart', function() {
+            const row = $(this).closest('tr');
+            const productId = row.data('id');
+
+            $.ajax({
+                url: `/api/cart/${productId}`,
+                method: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                success: function(response) {
+                    if (response && typeof response.cart === 'object') {
+                        const cart = Object.values(response.cart);
+                        renderCartItems(cart);
+                        calculateCartTotal(cart);
+                        alertify.success('Item removed from cart');
+                    } else {
+                        console.error('Response data is not in expected format:', response.cart);
+                        alertify.error('Failed to remove item from cart');
+                    }
+                },
+                error: function(xhr) {
+                    console.error('There was an error removing the product from the cart!', xhr);
+                    alertify.error('Failed to remove item from cart');
+                }
+            });
+        });
+
+        // Load products, cart, and watchlist on page load
+        getCart();
+        fetchWatchlist();
+        updateCartCount();
+    });
+</script>
 
 <br>
 

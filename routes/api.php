@@ -21,12 +21,21 @@ Route::middleware('auth:sanctum')->group( function () {
 });
 
 ## APi CartController CRUD
+// GET: /products : Get All Products
 Route::get('/products', [CartController::class, 'getProducts']);
+
+// GET: /cart : Get All cart
 Route::get('/cart', [CartController::class, 'getCart']);
+
+// POST: /cart : Add To Cart
 Route::post('/cart', [CartController::class, 'addToCart']);
+
 Route::delete('/cart/{productId}', [CartController::class, 'removeFromCart']);
+
 Route::patch('/cart/{productId}', [CartController::class, 'updateQuantity']);
+
 Route::post('/checkout', [CartController::class, 'checkout']);
+
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon']);
 
 // Route::post('/save-session-data', [CartController::class, 'store_checkout_session']);

@@ -47,8 +47,9 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             DB::table('ecommerce_products')->insert([
                 'vendor_id' => $i,
-                'name' => 'Product ' . $i,
-                'detail' => 'Product detail ' . $i,
+                'product_name' => 'Product ' . $i,
+                'product_cover'=> 'Cover ' . $i,
+                'product_detail' => 'Product detail ' . $i,
                 'sku' => 'SKU' . $i,
                 'price' => 100.50 + ($i * 10),
                 'stock_quantity' => 10 * $i,
@@ -57,7 +58,6 @@ class DatabaseSeeder extends Seeder
                 'brand' => 'Brand ' . $i,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'deleted_at' => null
             ]);
         }
 

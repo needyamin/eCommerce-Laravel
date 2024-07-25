@@ -14,9 +14,14 @@ return new class extends Migration
         Schema::create('ecommerce_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id');
-            $table->string('name');
-            $table->string('name');
-            $table->longtext('detail');
+            $table->string('product_name');
+            $table->string('product_cover')->nullable(); // because later it Updated
+            $table->string('image_1')->nullable(); 
+            $table->string('image_2')->nullable(); 
+            $table->string('image_3')->nullable(); 
+            $table->string('image_4')->nullable(); 
+            $table->string('image_5')->nullable(); 
+            $table->longtext('product_detail');
             $table->string('sku')->unique();
             $table->decimal('price', 10, 2);
             $table->decimal('actual_price')->nullable();

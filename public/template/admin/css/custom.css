@@ -1,0 +1,29 @@
+.thumbnail {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.thumbnail img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: #f8f8f8;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+}

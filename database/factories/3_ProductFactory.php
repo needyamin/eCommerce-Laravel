@@ -31,6 +31,7 @@ $factory->afterCreatingState(EcommerceProduct::class, [], function ($product, $f
     DB::table('ecommerce_products')->insert([
         'vendor_id' => $product['vendor_id'],
         'name' => $product['name'],
+        'product_cover' => $product['product_cover'],
         'detail' => $product['detail'],
         'sku' => $product['sku'],
         'price' => $product['price'],
