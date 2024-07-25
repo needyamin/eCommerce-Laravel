@@ -93,7 +93,7 @@
   <!-- <p> Total: @ cartTotal  tk </p> -->
    </a>
 
-    <div class="dropdown-panel" style="padding-left: 0; width:200px;">
+    <div class="dropdown-panel" style="">
       Items
         </div>
 
