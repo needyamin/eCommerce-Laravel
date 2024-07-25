@@ -125,7 +125,7 @@
             cart.forEach(item => {
                 const row = `
                     <tr data-id="${item.id}">
-                        <td>${item.name}</td>
+                        <td>${item.product_name}</td>
                         <td>$${parseFloat(item.price).toFixed(2)}</td>
                         <td style="width:15%">
                             <input type="number" class="item-quantity" value="${item.quantity}" min="1">

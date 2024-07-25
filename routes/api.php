@@ -38,8 +38,11 @@ Route::post('/checkout', [CartController::class, 'checkout']);
 
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon']);
 
+
 // Route::post('/save-session-data', [CartController::class, 'store_checkout_session']);
 Route::post('/watchlist', [CartController::class, 'addToWatchlist']);
 Route::get('/watchlist', [CartController::class, 'getWatchlist']);
+Route::delete('/watchlist/{productId}', [CartController::class, 'removeFromWatchlist']);
+Route::get('/remove-all-watchlist', [CartController::class, 'removeAllWatchlist']);
 
 

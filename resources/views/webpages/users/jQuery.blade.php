@@ -4,6 +4,8 @@
 @extends('re_usable_users.header')
 @extends('re_usable_users.slider')
 
+@vite('resources/js/app.js')
+
 @section('shoping-cart-scripts')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -12,6 +14,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 
 @endsection
 
@@ -25,7 +29,7 @@
           <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" class="product-img default">
           <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" width="300" class="product-img hover">
         </a>
-        <p class="showcase-badge">{{ $product->discount ?? '0' }}% Dynamic</p>
+        <p class="showcase-badge">{{ $product->offer_percentage ?? '0' }}% Dynamic</p>
         <div class="showcase-actions">
           <button class="btn-action add-to-watchlist" data-id="{{ $product->id }}" data-quantity="1">
             <ion-icon name="heart-outline" role="img" class="md hydrated" aria-label="heart outline"></ion-icon>
@@ -40,6 +44,10 @@
             <ion-icon name="bag-add-outline" role="img" class="md hydrated" aria-label="bag add outline"></ion-icon>
           </button>
           <button class="btn-action remove-from-cart" data-id="{{ $product->id }}">
+            <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="trash outline"></ion-icon>
+          </button>
+
+          <button class="btn-action remove-from-watch" data-id="{{ $product->id }}">
             <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="trash outline"></ion-icon>
           </button>
         </div>
@@ -132,6 +140,7 @@
                             }
                         }, 0);
                         document.getElementById('total-cart-items').innerText = totalItems;
+                        document.getElementById('total-cart-items-mobile').innerText = totalItems;
                     } else {
                         console.error('Response data is not in the expected format:', response.data);
                     }
@@ -181,6 +190,28 @@
                 });
         }
 
+
+        // Function to remove an item from the watch
+        function removeFromWatch(productId) {
+            console.log(`Removing from watchlist: productId=${productId}`);
+            axios.delete(`/api/watchlist/${productId}`)
+                .then(response => {
+                    if (response.data && typeof response.data === 'object') {
+                        const watchlist = Object.values(response.data);
+                        console.log('Watchlist:', watchlist);
+                        updateWatchlistCount();
+                        alertify.success('Item removed from watchlist');
+                    } else {
+                        console.error('Response data is not in expected format:', response.data);
+                        alertify.error('Failed to remove item from watchlist');
+                    }
+                })
+                .catch(error => {
+                    console.error('There was an error removing the product from the watchlist!', error);
+                    alertify.error('Failed to remove item from watchlist');
+                });
+        }
+
         // Load products, cart, and watchlist on page load
         fetchWatchlist();
         updateCartCount();
@@ -204,14 +235,14 @@
             const productId = $(this).data('id');
             removeFromCart(productId);
         });
+
+        // Event listener for remove from watchlist buttons
+        $(document).on('click', '.remove-from-watch', function() {
+            const productId = $(this).data('id');
+            removeFromWatch(productId);
+        });
     });
 </script>
-
-
-
-
-
-
 
 
 

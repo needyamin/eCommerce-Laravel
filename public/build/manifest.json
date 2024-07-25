@@ -1,20 +1,14 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-l0sNRNKZ.js",
+    "file": "assets/app-DP2rzg_V.js",
     "name": "app",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-YTLJ-_4p.js",
+    "file": "assets/app-l0sNRNKZ.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "imports": [
-      "resources/css/app.css"
-    ],
-    "css": [
-      "assets/app-C1t8VLuU.css"
-    ]
+    "isEntry": true
   }
 }

@@ -110,6 +110,21 @@ class CartController extends Controller
         return response()->json(['status' => 'success', 'cart' => $cart]);
     }
 
+    public function removeFromWatchlist($productId) {
+        $watchlist = Session::get('watchlist', []);
+        if (isset($watchlist[$productId])) {
+            unset($watchlist[$productId]);
+            Session::put('watchlist', $watchlist);
+        }
+        return response()->json(['status' => 'success', 'watchlist' => $watchlist]);
+    }
+
+    //Remove all watchlist
+    public function removeAllWatchlist(Request $request) {
+        $watchlist = Session::get('watchlist', []);
+        Session::forget('watchlist', $watchlist);
+        return response()->json(['status' => 'success', 'watchlist' => $watchlist]);
+    }
 
     public function updateQuantity(Request $request, $productId) {
         $quantity = $request->input('quantity');

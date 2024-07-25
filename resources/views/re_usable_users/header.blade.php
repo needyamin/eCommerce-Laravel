@@ -341,7 +341,7 @@
 
   <button class="action-btn">
     <ion-icon name="bag-handle-outline"></ion-icon>
-    <span class="count">  <span id="total-cart-items">0</span> </span>
+    <span class="count">  <span id="total-cart-items-mobile">0</span> </span>
   </button>
 
   <button class="action-btn">
