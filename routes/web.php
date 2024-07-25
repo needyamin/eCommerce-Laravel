@@ -28,6 +28,9 @@ Route::get('/', [ProductController::class, 'testing'])->name('testing');
 // eCommerce Shopping Cart Page
 Route::get('/cart', function () { return view('webpages.users.checkout');});
 
+// eCommerce Product Page
+Route::get('/product/{id}', function () { return'000';});
+
 
 
 Route::group(['middleware' => ['auth', 'role:admin']], function () {

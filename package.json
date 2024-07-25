@@ -8,20 +8,15 @@
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-vue": "^5.0.5",
-        "axios": "^1.6.4",
+        "axios": "^1.7.2",
         "bootstrap": "^5.3.3",
         "laravel-vite-plugin": "^1.0",
         "sass": "^1.56.1",
-        "vite": "^5.0",
-        "vue": "^3.4.31"
+        "vite": "^5.0"
     },
     "dependencies": {
-        "bootstrap-vue": "^2.23.1",
-        "bootstrap-vue-next": "^0.23.4",
+        "alertifyjs": "^1.14.0",
         "build": "^0.1.4",
-        "jquery": "^3.7.1",
-        "vue-final-modal": "^4.5.4",
-        "vue-router": "^4.4.0",
-        "vuex": "^4.1.0"
+        "jquery": "^3.7.1"
     }
 }
