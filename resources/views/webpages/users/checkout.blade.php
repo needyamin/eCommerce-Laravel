@@ -172,31 +172,39 @@
             });
         }
 
-        function checkout() {
-            console.log('Checking out...');
-            const cart = [];
-            $('#cart-items tr').each(function() {
-                const id = $(this).data('id');
-                const quantity = $(this).find('.item-quantity').val();
-                cart.push({ id, quantity });
-            });
+    function checkout() {
+    console.log('Checking out...');
+    const cart = [];
+    
+    $('#cart-items tr').each(function() {
+        const id = $(this).data('id');
+        const quantity = parseInt($(this).find('.item-quantity').val()) || 0;
+        const price = parseFloat($(this).find('.item-price').val()) || 0.0;
+        const product_name = $(this).find('.item-product_name').val() || '';
+        const stock_quantity = parseInt($(this).find('.item-stock_quantity').val()) || 0;
+        
+        cart.push({ id, quantity, product_name, price, stock_quantity });
+    });
 
-            $.ajax({
-                url: '/api/checkout',
-                method: 'POST',
-                data: { cartItems: cart, cartTotal: $('#cart-total').text() },
-                headers: { 'X-CSRF-TOKEN': csrfToken },
-                success: function(response) {
-                    $('#cart-items').empty();
-                    $('#cart-total').text('0.00');
-                    alertify.success('Checkout successful!');
-                },
-                error: function(xhr) {
-                    console.error('There was an error during checkout!', xhr);
-                    alertify.error('Checkout failed');
-                }
-            });
+    const csrfToken = $('meta[name="csrf-token"]').attr('content'); // Assuming CSRF token is in a meta tag
+
+    $.ajax({
+        url: '/api/checkout',
+        method: 'POST',
+        data: { cartItems: cart, cartTotal: parseFloat($('#cart-total').text()) || 0.0 },
+        headers: { 'X-CSRF-TOKEN': csrfToken },
+        success: function(response) {
+            console.log(response);
+            $('#cart-items').empty();
+            $('#cart-total').text('0.00');
+            alertify.success('Checkout successful!');
+        },
+        error: function(xhr) {
+            console.error('There was an error during checkout!', xhr);
+            alertify.error('Checkout failed');
         }
+    });
+}
 
         // Event listeners
         $('#apply-coupon').click(applyCoupon);

@@ -138,7 +138,7 @@ class CartController extends Controller
 
 
 
-    public function checkout(Request $request) {
+    public function checkout_data(Request $request) {
        //\Log::info('Received checkout request:', $request->all());
         // Example: Retrieve cart items and total from request
         $cartItems = $request->input('cartItems', []);

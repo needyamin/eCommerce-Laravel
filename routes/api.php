@@ -34,7 +34,7 @@ Route::delete('/cart/{productId}', [CartController::class, 'removeFromCart']);
 
 Route::patch('/cart/{productId}', [CartController::class, 'updateQuantity']);
 
-Route::post('/checkout', [CartController::class, 'checkout']);
+Route::post('/checkout', [CartController::class, 'checkout_data']);
 
 Route::post('/apply-coupon', [CartController::class, 'applyCoupon']);
 
