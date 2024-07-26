@@ -109,6 +109,7 @@
                     if (response && typeof response === 'object') {
                         const cartItems = Object.values(response);
                         const totalItems = cartItems.reduce((total, item) => total + parseInt(item.quantity, 10), 0);
+                        updateCartCount();
                         $('#total-cart-items').text(totalItems);
                     } else {
                         console.error('Response data is not in expected format:', response);
@@ -138,7 +139,9 @@
                     </tr>
                 `;
                 cartItemsContainer.append(row);
+        
             });
+  
         }
 
         function calculateCartTotal(cart) {
