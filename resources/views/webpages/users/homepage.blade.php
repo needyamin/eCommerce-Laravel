@@ -45,7 +45,7 @@
 </div>
 
 
-{{ $products->links('pagination::bootstrap-5') }}
+<div class="container mt-3">{{ $products->links('pagination::bootstrap-5') }}</div>
 
 
 @extends('re_usable_users.sidebar')

@@ -7,13 +7,14 @@
 @section('shoping-cart-scripts')
 <!-- Add jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <!-- alertify -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
 @endsection
 
 @vite('resources/js/app.js')
+
+
 
 <div id="app" class="container mt-5">
     <h1 align="center">Shopping Cart</h1>
@@ -39,12 +40,12 @@
     <h3>Total: $<span id="cart-total">0.00</span> bdt</h3>
 
     <!-- Coupon Code Input -->
-    <div class="input-group mb-3">
+    <!-- <div class="input-group mb-3">
         <input type="text" class="form-control" id="coupon-code" placeholder="Enter coupon code" style="width:60%; flex:1">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" id="apply-coupon">Apply Coupon</button>
         </div>
-    </div>
+    </div> -->
 
     <button class="btn btn-success" id="checkout">Checkout</button>
 </div>
@@ -127,10 +128,10 @@
                     <tr data-id="${item.id}">
                         <td>${item.product_name}</td>
                         <td>$${parseFloat(item.price).toFixed(2)}</td>
-                        <td style="width:15%">
+                        <td style="width:150px;">
                             <input type="number" class="item-quantity" value="${item.quantity}" min="1">
                         </td>
-                        <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                        <td style="width:150px;">$${(item.price * item.quantity).toFixed(2)}</td>
                         <td>
                             <button class="btn-sm btn btn-danger remove-from-cart">Remove</button>
                         </td>

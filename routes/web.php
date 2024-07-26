@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Product\HomeController;
 
 # Use the shortcut Ctrl + K followed by Ctrl + F (Windows/Linux)
 
@@ -23,10 +22,13 @@ use App\Http\Controllers\Product\ProductController;
 Auth::routes();
 
 // eCommerce Homepage
-Route::get('/', [ProductController::class, 'testing'])->name('testing');
+Route::get('/', [HomeController::class, 'homepage'])->name('homepage');
 
 // eCommerce Shopping Cart Page
 Route::get('/cart', function () { return view('webpages.users.checkout');});
+
+Route::get('/watchlist', function () { return view('webpages.users.watchlist');});
+
 
 // eCommerce Product Page
 Route::get('/product/{id}', function () { return'000';});

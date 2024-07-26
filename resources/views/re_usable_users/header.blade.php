@@ -39,11 +39,19 @@
       </p>
     </div>
 
+
+    @auth
+    <div class="header-top-actions">
+      <a href="{{ url('admin/dashboard') }}" class="menu"> Dashboard </a>
+    </div>
+    @else
     <div class="header-top-actions">
       <a href="login" class="menu"> Sign In </a>
       <a href="register" class="menu"> Admin Login </a>
-
     </div>
+    @endauth
+
+
   </div>
 </div>
 
@@ -78,12 +86,12 @@
         </button> -->
 
 
-      <router-link to="/checkout" class="menu-title">
+      <a href="/watchlist" class="menu-title">
         <button class="action-btn">
           <ion-icon name="star"></ion-icon>
           <span class="count">   <span id="total-watchlist-items">0</span>  </span>
         </button>
-      </router-link>
+      </a>
 
   <div class="desktop-menu-category-list">
   <div class="menu-category">
