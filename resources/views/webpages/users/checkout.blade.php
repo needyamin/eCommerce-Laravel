@@ -5,9 +5,8 @@
 @extends('re_usable_users.slider')
 
 @section('shoping-cart-scripts')
-
+@vite('resources/js/checkout.js')
 @endsection
-
 
 
 
@@ -47,7 +46,6 @@
 
 
 
-@vite('resources/js/checkout.js')
 <br>
 @extends('re_usable_users.sidebar')
 @extends('re_usable_users.footer')

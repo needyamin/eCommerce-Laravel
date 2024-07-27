@@ -5,9 +5,9 @@
 @extends('re_usable_users.slider')
 
 @section('shoping-cart-scripts')
-@endsection
-
 @vite('resources/js/app.js')
+@vite('resources/js/watchlist.js')
+@endsection
 
 
 <div id="app" class="container mt-5">
@@ -30,15 +30,11 @@
     </div>
 
 
-
-
-    <button class="btn btn-success" id="checkout">Shopping Home</button>
+<button class="btn btn-success" id="checkout">Shopping Home</button>
 </div>
 
-@vite('resources/js/watchlist.js')
 
 <br>
-
 @extends('re_usable_users.sidebar')
 @extends('re_usable_users.footer')
 @endsection
