@@ -16,6 +16,7 @@ $(document).ready(function() {
                     const watchlist = Object.values(response.data);
                     const totalItems = watchlist.length; // Count the number of items in the watchlist
                     document.getElementById('total-watchlist-items').innerText = totalItems;
+                    document.getElementById('total-watchlist-items-mobile').innerText = totalItems;
                 } else {
                     console.error('Response data is not in the expected format:', response.data);
                 }
@@ -30,6 +31,7 @@ $(document).ready(function() {
         axios.post('/api/watchlist', { product_id: productId, quantity: quantity })
             .then(response => {
                 if (response.data && response.data.status === 'success') {
+                    alertify.set('notifier','position', 'top-center');
                     alertify.success('Item added to watchlist');
                     updateWatchlistCount(); // Update the watchlist count
                 } else {
@@ -97,6 +99,7 @@ $(document).ready(function() {
             data: { product_id: productId, quantity: quantity },
             success: function(response) {
                 console.log('Add to Cart Response:', response);
+                alertify.set('notifier','position', 'top-center');
                 alertify.success('Item added to cart');
                 updateCartCount(); // Update the cart count after adding an item
             },
@@ -107,14 +110,14 @@ $(document).ready(function() {
         });
     }
 
-    // Function to remove an item from the cart
+    // Function to remove an item from the cart # TRY LATER, MAYBE IT WORK INSIDE CHECKOUT
     function removeFromCart(productId) {
         console.log(`Removing from cart: productId=${productId}`);
         axios.delete(`/api/cart/${productId}`)
             .then(response => {
                 if (response.data && typeof response.data === 'object') {
                     updateCartCount(); // Update the cart count after removing an item
-                    alertify.success('Item removed from cart');
+                    //alertify.success('Item removed from cart');
                 } else {
                     console.error('Response data is not in expected format:', response.data);
                     alertify.error('Failed to remove item from cart');

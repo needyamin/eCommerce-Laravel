@@ -41,6 +41,7 @@ $(document).ready(function() {
                     console.log('Watchlist:', watchlist);
                     const totalItems = watchlist.length; 
                     document.getElementById('total-watchlist-items').innerText = totalItems;
+                    document.getElementById('total-watchlist-items-mobile').innerText = totalItems;
                     // Update watchlist UI if needed
                 } else {
                     console.error('Response data is not in expected format:', response);
@@ -64,6 +65,7 @@ $(document).ready(function() {
                     const totalItems = cartItems.reduce((total, item) => total + parseInt(item.quantity, 10), 0);
                     updateCartCount();
                     $('#total-cart-items').text(totalItems);
+                    $('#total-cart-items-mobile').text(totalItems);
                 } else {
                     console.error('Response data is not in expected format:', response);
                 }
@@ -207,6 +209,7 @@ $.ajax({
                         const cart = Object.values(response.cart);
                         renderCartItems(cart);
                         calculateCartTotal(cart);
+                        alertify.set('notifier','position', 'top-center');
                         alertify.success('Quantity updated');
                     } else {
                         console.error('Response data is not in expected format:', response);
@@ -234,6 +237,7 @@ $.ajax({
                     const cart = Object.values(response.cart);
                     renderCartItems(cart);
                     calculateCartTotal(cart);
+                    alertify.set('notifier','position', 'top-center');
                     alertify.success('Item removed from cart');
                 } else {
                     console.error('Response data is not in expected format:', response.cart);

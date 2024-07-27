@@ -85,7 +85,6 @@
           <span class="count">0</span>
         </button> -->
 
-
       <a href="/watchlist" class="menu-title">
         <button class="action-btn">
           <ion-icon name="star"></ion-icon>
@@ -347,10 +346,20 @@
     <ion-icon name="menu-outline"></ion-icon>
   </button>
 
-  <button class="action-btn">
+   <!-- cart mobile -->
+   <a href="{{ url('cart') }}" class="action-btn">
     <ion-icon name="bag-handle-outline"></ion-icon>
     <span class="count">  <span id="total-cart-items-mobile">0</span> </span>
-  </button>
+   </a>
+
+  <!-- watchlist mobile -->
+  <a href="{{ url('watchlist') }}" class="action-btn">
+    <ion-icon name="star"></ion-icon>
+    <span class="count"> <span id="total-watchlist-items-mobile">0</span></span>
+  </a>
+
+
+
 
   <button class="action-btn">
     <ion-icon name="home-outline"></ion-icon>
