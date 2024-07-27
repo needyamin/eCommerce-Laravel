@@ -7,9 +7,11 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/style-prefix.css',
                 'resources/js/app.js',
                 'resources/js/checkout.js',
                 'resources/js/watchlist.js',
+                'resources/js/theme/script.js',
             ],
             refresh: true,
         }),

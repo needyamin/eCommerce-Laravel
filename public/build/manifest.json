@@ -8,6 +8,11 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/style-prefix.css": {
+    "file": "assets/style-prefix-ME6b2HAV.css",
+    "src": "resources/css/style-prefix.css",
+    "isEntry": true
+  },
   "resources/js/app.js": {
     "file": "assets/app-Cxxw5nrO.js",
     "name": "app",
@@ -28,6 +33,12 @@
     "imports": [
       "_jquery-CyGccwRX.js"
     ]
+  },
+  "resources/js/theme/script.js": {
+    "file": "assets/script-CckpQTVN.js",
+    "name": "script",
+    "src": "resources/js/theme/script.js",
+    "isEntry": true
   },
   "resources/js/watchlist.js": {
     "file": "assets/watchlist-CqBeA1B_.js",
