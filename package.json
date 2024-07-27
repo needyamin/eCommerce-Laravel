@@ -17,6 +17,7 @@
     "dependencies": {
         "alertifyjs": "^1.14.0",
         "build": "^0.1.4",
+        "ionicons": "^7.4.0",
         "jquery": "^3.7.1"
     }
 }

@@ -1,0 +1,9 @@
+import{$ as o,a as n}from"./jquery-CyGccwRX.js";o(document).ready(function(){const i=o('meta[name="csrf-token"]').attr("content");function l(){console.log("Fetching watchlist..."),o.ajax({url:"/api/watchlist",method:"GET",success:function(t){if(t&&typeof t=="object"){const c=Object.values(t);s(c),r();const e=c.length;document.getElementById("total-watchlist-items").innerText=e}else console.error("Response data is not in expected format:",t)},error:function(t){console.error("There was an error fetching the watchlist!",t)}})}function r(){o.ajax({url:"/api/watchlist",method:"GET",success:function(t){if(t&&typeof t=="object"){const e=Object.values(t).length;o("#total-watchlist-items").text(e)}else console.error("Response data is not in the expected format:",t)},error:function(t){console.error("There was an error fetching the watchlist!",t)}})}function s(t){const c=o("#cart-items");c.empty(),t.forEach(e=>{const a=`
+                <tr data-id="${e.id}">
+                    <td>${e.product_name}</td>
+                    <td>$${parseFloat(e.price).toFixed(2)}</td>
+                    <td>
+                        <button class="btn-sm btn btn-danger remove-from-cart">Remove</button>
+                    </td>
+                </tr>
+            `;c.append(a)})}o("#cart-items").on("click",".remove-from-cart",function(){const c=o(this).closest("tr").data("id");o.ajax({url:`/api/watchlist/${c}`,method:"DELETE",headers:{"X-CSRF-TOKEN":i},success:function(e){if(e&&typeof e.watchlist=="object"){const a=Object.values(e.watchlist);s(a),r(),n.success("Item removed from watchlist")}else console.error("Response data is not in expected format:",e.watchlist),n.error("Failed to remove item from cart")},error:function(e){console.error("There was an error removing the product from the cart!",e),n.error("Failed to remove item from cart")}})}),l(),r()});

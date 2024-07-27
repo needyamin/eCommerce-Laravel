@@ -1,17 +1,41 @@
 {
+  "_jquery-CyGccwRX.js": {
+    "file": "assets/jquery-CyGccwRX.js",
+    "name": "jquery"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-l0sNRNKZ.js",
-    "name": "app",
+    "file": "assets/app-BuY75eR6.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-B1vFMfGc.js",
+    "file": "assets/app-Cxxw5nrO.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
+    "imports": [
+      "_jquery-CyGccwRX.js"
+    ],
     "css": [
       "assets/app-B-X2tn6c.css"
+    ]
+  },
+  "resources/js/checkout.js": {
+    "file": "assets/checkout-CJBskHTd.js",
+    "name": "checkout",
+    "src": "resources/js/checkout.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-CyGccwRX.js"
+    ]
+  },
+  "resources/js/watchlist.js": {
+    "file": "assets/watchlist-CqBeA1B_.js",
+    "name": "watchlist",
+    "src": "resources/js/watchlist.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-CyGccwRX.js"
     ]
   }
 }
