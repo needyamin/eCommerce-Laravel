@@ -14,6 +14,8 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
 
+    
+
     public function testing() {
         $products = DB::table('ecommerce_products')->paginate(8);
         return view('webpages.users.jQuery', ['products' => $products]);

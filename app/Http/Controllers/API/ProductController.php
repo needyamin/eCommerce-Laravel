@@ -7,9 +7,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+
+   // GET ALL PRODUCTS 
+    public function getProducts(Request $request) {
+            $perPage = $request->input('per_page', 1);
+            $products = DB::table('ecommerce_products')->where('is_active', 1)->paginate($perPage);
+            return response()->json($products);
+        }
+
     public function index(): JsonResponse {
         $products = Product::all();
         return $this->sendResponse($products, 'Products retrieved successfully.');

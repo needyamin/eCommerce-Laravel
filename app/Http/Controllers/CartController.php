@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     
-    public function getProducts() {
-        $products = DB::table('ecommerce_products')->where('is_active', 1)->get();
-        return response()->json($products);
-    }
 
 
     public function getCart() {
