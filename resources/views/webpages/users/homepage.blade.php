@@ -5,6 +5,14 @@
 @extends('re_usable_users.slider')
 
 @section('shoping-cart-scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Include AlertifyJS CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css">
+  <!-- Include AlertifyJS JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/js/alertify.min.js"></script>
+
+
 <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 @endsection
 
@@ -15,7 +23,7 @@
 
 
 
-  <style>
+<style>
 .product {
   position: relative;
   display: inline-block;
@@ -29,7 +37,7 @@
   transform: translate(-50%, -50%);
   text-align: center;
   background: rgba(0, 0, 0, 0.5); /* Light dark background */
-  padding: 10px;
+
   border-radius: 5px;
 }
 
@@ -41,7 +49,7 @@
   background-color: #ff5722;
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 5px 10px;
   cursor: pointer;
 }
 
@@ -66,70 +74,226 @@
   color: white;
 }
 
+
+.showcase-badge_new {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--ocean-green);
+    font-size: var(--fs-8);
+    font-weight: var(--weight-500);
+    color: var(--white);
+    padding: 0 8px;
+    -webkit-border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-sm);
+    z-index: 3;
+}
+
+
   </style>
 
 
 
-
+<div class="product-grid container-fluid">
 @foreach ($products as $product)
-  <div class="product card">
-    <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" width="300" class="product-img">       
-    <p class="showcase-badge">{{ $product->offer_percentage ?? '0' }}% Dynamic</p>
-    <div class="add-to-cart-container">
-      <button class="add-to-cart-btn">Add to cart</button>
-      <div class="cart-options">
-        <button class="decrease">-</button>
-        <span class="quantity">0</span>
-        <button class="increase">+</button>
+  <div class="showcase">
+    <div class="product showcase-banner" data-product-id="{{ $product->id }}">
+      <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" width="300" class="product-img">
+      <p class="showcase-badge_new">{{ $product->offer_percentage ?? '0' }}% Dynamic</p>
+      <div class="add-to-cart-container">
+        <button class="add-to-cart-btn add-to-cart" data-id="{{ $product->id }}" data-quantity="1">Add to cart</button>
+        <div class="cart-options" style="display: none;">
+          <button class="decrease">-</button>
+          <span class="quantity">0</span>
+          <button class="increase">+</button>
+        </div>
       </div>
     </div>
-    <button class="btn btn-success w-100" data-id="{{ $product->id }}" data-quantity="1">Add To Cart</button>
+    <button class="btn btn-success w-100 add-to-cart" data-id="{{ $product->id }}" data-quantity="1">Add To Cart</button>
   </div>
 @endforeach
+</div>
 
 <div class="container mt-3">{{ $products->links('pagination::bootstrap-5') }}</div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-
-    addToCartBtns.forEach(button => {
-      button.addEventListener('click', (event) => {
-        const container = event.target.parentElement;
-        const cartOptions = container.querySelector('.cart-options');
-        const addToCartBtn = container.querySelector('.add-to-cart-btn');
-
-        addToCartBtn.style.display = 'none';
-        cartOptions.style.display = 'flex';
-      });
-    });
-
+document.addEventListener('DOMContentLoaded', function() {
+  function initializeCartOptions() {
     const products = document.querySelectorAll('.product');
 
     products.forEach(product => {
-      const decreaseBtn = product.querySelector('.decrease');
-      const increaseBtn = product.querySelector('.increase');
+      const productId = product.dataset.productId;
+      const addToCartBtn = product.querySelector('.add-to-cart');
+      const cartOptions = product.querySelector('.cart-options');
       const quantitySpan = product.querySelector('.quantity');
 
-      if (decreaseBtn && increaseBtn && quantitySpan) {
-        decreaseBtn.addEventListener('click', () => {
-          let quantity = parseInt(quantitySpan.textContent);
-          if (quantity > 0) {
-            quantity--;
-            quantitySpan.textContent = quantity;
-          }
-        });
+      // Fetch current cart state from the server
+      $.ajax({
+        url: '/api/cart',
+        method: 'GET',
+        success: function(response) {
+          if (response && typeof response === 'object') {
+            const cartItems = Object.values(response);
+            const cartItem = cartItems.find(item => item.id == productId);
 
-        increaseBtn.addEventListener('click', () => {
-          let quantity = parseInt(quantitySpan.textContent);
-          quantity++;
-          quantitySpan.textContent = quantity;
-        });
+            if (cartItem) {
+              quantitySpan.textContent = cartItem.quantity;
+              cartOptions.style.display = 'flex';
+              // Change button text and style
+              if (addToCartBtn) {
+                addToCartBtn.textContent = 'Already Added';
+                addToCartBtn.classList.remove('btn-success');
+                addToCartBtn.classList.add('btn-secondary');
+                addToCartBtn.disabled = true; // Optional: Disable the button
+              }
+            } else {
+              quantitySpan.textContent = '0';
+              cartOptions.style.display = 'none';
+              // Reset button text and style
+              if (addToCartBtn) {
+                addToCartBtn.textContent = 'Add To Cart';
+                addToCartBtn.classList.add('btn-success');
+                addToCartBtn.classList.remove('btn-secondary');
+                addToCartBtn.disabled = false;
+              }
+            }
+          } else {
+            console.error('Response data is not in expected format:', response);
+          }
+        },
+        error: function(xhr) {
+          console.error('Error fetching cart items:', xhr);
+        }
+      });
+    });
+  }
+
+  function updateCartQuantity(productId, quantity) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+      url: `/api/cart/${productId}`,
+      method: 'PATCH',
+      data: { quantity: quantity },
+      headers: { 'X-CSRF-TOKEN': csrfToken },
+      success: function(response) {
+        if (response && response.status === 'success') {
+          updateCartCount(); // Update cart count after quantity update
+          initializeCartOptions(); // Re-check cart status
+        } else {
+          console.error('Error updating quantity:', response);
+        }
+      },
+      error: function(xhr) {
+        console.error('Error updating quantity:', xhr);
+      }
+    });
+  }
+
+  function removeFromCart(productId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+      url: `/api/cart/${productId}`,
+      method: 'DELETE',
+      headers: { 'X-CSRF-TOKEN': csrfToken },
+      success: function(response) {
+        if (response && response.status === 'success') {
+          updateCartCount(); // Update cart count after item removal
+          initializeCartOptions(); // Re-check cart status
+        } else {
+          console.error('Error removing item from cart:', response);
+        }
+      },
+      error: function(xhr) {
+        console.error('Error removing item from cart:', xhr);
+      }
+    });
+  }
+
+  function updateCartCount() {
+    $.ajax({
+      url: '/api/cart',
+      method: 'GET',
+      success: function(response) {
+        if (response && typeof response === 'object') {
+          // Assuming response format is a dictionary of cart items
+          const cartItems = Object.values(response);
+          const totalItems = cartItems.reduce((total, item) => total + parseInt(item.quantity, 10), 0);
+          $('#total-cart-items').text(totalItems);
+          $('#total-cart-items-mobile').text(totalItems);
+        } else {
+          console.error('Response data is not in expected format:', response);
+        }
+      },
+      error: function(xhr) {
+        console.error('There was an error fetching the cart count!', xhr);
+      }
+    });
+  }
+
+  // Initialize cart options based on existing cart items
+  initializeCartOptions();
+
+  // Handle 'Add to Cart' button clicks
+  const addToCartBtns = document.querySelectorAll('.add-to-cart');
+
+  addToCartBtns.forEach(button => {
+    button.addEventListener('click', (event) => {
+      const container = event.target.closest('.product');
+      const cartOptions = container.querySelector('.cart-options');
+      const quantitySpan = container.querySelector('.quantity');
+      const productId = button.dataset.id;
+
+      if (button.textContent === 'Add To Cart') {
+        quantitySpan.textContent = '1';
+        updateCartQuantity(productId, 1);
       }
     });
   });
+
+  // Handle quantity changes
+  const products = document.querySelectorAll('.product');
+
+  products.forEach(product => {
+    const decreaseBtn = product.querySelector('.decrease');
+    const increaseBtn = product.querySelector('.increase');
+    const quantitySpan = product.querySelector('.quantity');
+    const productId = product.dataset.productId;
+
+    if (decreaseBtn && increaseBtn && quantitySpan) {
+      decreaseBtn.addEventListener('click', () => {
+        let quantity = parseInt(quantitySpan.textContent);
+        if (quantity > 0) {
+          quantity--;
+          quantitySpan.textContent = quantity;
+
+          // Update the quantity in the cart via AJAX
+          updateCartQuantity(productId, quantity);
+          
+          // Remove the item if quantity is 0
+          if (quantity === 0) {
+            removeFromCart(productId);
+          }
+        }
+      });
+
+      increaseBtn.addEventListener('click', () => {
+        let quantity = parseInt(quantitySpan.textContent);
+        quantity++;
+        quantitySpan.textContent = quantity;
+
+        // Update the quantity in the cart via AJAX
+        updateCartQuantity(productId, quantity);
+      });
+    }
+  });
+});
 </script>
+
+
 
 
 

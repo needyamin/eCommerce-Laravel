@@ -92,20 +92,16 @@
         </button>
       </a>
 
-  <div class="desktop-menu-category-list">
-  <div class="menu-category">
+
   <a href="cart" class="action-btn " @mouseover="showDropdown" @mouseleave="hideDropdown">
   <ion-icon name="bag-handle-outline"></ion-icon>
   <span class="count">  <span id="total-cart-items">0</span> </span>
   <!-- <p> Total: @ cartTotal  tk </p> -->
    </a>
 
-    <div class="dropdown-panel" style="">
-      Items
-        </div>
 
       </div>
-    </div>
+
 
 
 
