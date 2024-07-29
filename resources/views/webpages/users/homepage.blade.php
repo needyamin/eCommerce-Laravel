@@ -36,6 +36,7 @@
 
 .product:hover .add-to-cart-container {
   display: block;
+
 }
 
 .add-to-cart-btn {
@@ -58,6 +59,10 @@
   padding: 5px 10px;
   margin: 0 5px;
   cursor: pointer;
+  margin: 0 auto;
+}
+.add-to-cart{
+  margin: 0 auto;
 }
 
 .cart-options .quantity {
@@ -72,6 +77,8 @@
   text-align: center;
   color: white;
 }
+
+
 
 .showcase-badge_new {
     position: absolute;
@@ -144,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
               cartOptions.style.display = 'flex';
 
               // Update price display
-              priceDisplay.textContent = `$${(price * quantity).toFixed(2)}`;
+              priceDisplay.textContent = `${(price * quantity).toFixed()} TK`;
 
               // Change button text and style
               if (addToCartBtn) {
@@ -153,6 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 addToCartBtn.classList.add('btn-secondary');
                 addToCartBtn.disabled = true; // Optional: Disable the button
               }
+
+    
+
             } else {
               quantitySpan.textContent = '0';
               cartOptions.style.display = 'none';
