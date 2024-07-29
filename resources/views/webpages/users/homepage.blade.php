@@ -6,13 +6,6 @@
 
 @section('shoping-cart-scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Include AlertifyJS CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css">
-  <!-- Include AlertifyJS JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/js/alertify.min.js"></script>
-
-
 <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 @endsection
 
@@ -73,7 +66,12 @@
   text-align: center;
   color: white;
 }
-
+.price-display {
+  min-width: 20px;
+  height: 100%;
+  text-align: center;
+  color: white;
+}
 
 .showcase-badge_new {
     position: absolute;
@@ -101,6 +99,7 @@
       <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" width="300" class="product-img">
       <p class="showcase-badge_new">{{ $product->offer_percentage ?? '0' }}% Dynamic</p>
       <div class="add-to-cart-container">
+      <div class="price-display"></div> <!-- Price display element -->
         <button class="add-to-cart-btn add-to-cart" data-id="{{ $product->id }}" data-quantity="1">Add to cart</button>
         <div class="cart-options" style="display: none;">
           <button class="decrease">-</button>
@@ -116,7 +115,6 @@
 
 <div class="container mt-3">{{ $products->links('pagination::bootstrap-5') }}</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -128,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const addToCartBtn = product.querySelector('.add-to-cart');
       const cartOptions = product.querySelector('.cart-options');
       const quantitySpan = product.querySelector('.quantity');
+      const priceDisplay = product.querySelector('.price-display'); // New price display element
 
       // Fetch current cart state from the server
       $.ajax({
@@ -139,8 +138,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const cartItem = cartItems.find(item => item.id == productId);
 
             if (cartItem) {
-              quantitySpan.textContent = cartItem.quantity;
+              const price = cartItem.price; // Fetch the price
+              const quantity = cartItem.quantity;
+              quantitySpan.textContent = quantity;
               cartOptions.style.display = 'flex';
+
+              // Update price display
+              priceDisplay.textContent = `$${(price * quantity).toFixed(2)}`;
+
               // Change button text and style
               if (addToCartBtn) {
                 addToCartBtn.textContent = 'Already Added';
@@ -158,6 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 addToCartBtn.classList.remove('btn-secondary');
                 addToCartBtn.disabled = false;
               }
+              // Reset price display
+              priceDisplay.textContent = '';
             }
           } else {
             console.error('Response data is not in expected format:', response);
@@ -292,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
 
 
 
