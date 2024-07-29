@@ -1572,15 +1572,9 @@
   
   .product-grid .showcase-actions {
     position: absolute;
-    top: 10px;
+    bottom: 10px; 
     right: 10px;
     font-size: 20px;
-    -webkit-transform: translateX(50px);
-        -ms-transform: translateX(50px);
-            transform: translateX(50px);
-    -webkit-transition: var(--transition-timing);
-    -o-transition: var(--transition-timing);
-    transition: var(--transition-timing);
     z-index: 3;
   }
   
