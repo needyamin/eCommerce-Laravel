@@ -20,6 +20,8 @@
 .product {
   position: relative;
   display: inline-block;
+  width: 300px; 
+  height: 300px; 
 }
 
 .add-to-cart-container {
@@ -28,15 +30,23 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5); /* Light dark background */
-
-  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional: Add a background overlay */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .product:hover .add-to-cart-container {
-  display: block;
+  display: flex; /* Use flexbox to align content */
+}
 
+.content-center-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-bottom: 20px; 
 }
 
 .add-to-cart-btn {
@@ -79,7 +89,6 @@
 }
 
 
-
 .showcase-badge_new {
     position: absolute;
     top: 15px;
@@ -94,7 +103,6 @@
     z-index: 3;
 }
 
-
   </style>
 
 
@@ -106,6 +114,8 @@
       <img src="{{ asset('template/user/assets/images/products/jacket-4.jpg') }}" alt="{{ $product->product_name }}" width="300" class="product-img">
       <p class="showcase-badge_new">{{ $product->offer_percentage ?? '0' }}% Dynamic</p>
       <div class="add-to-cart-container">
+      <div class="content-center-bottom">
+
       <div class="price-display"></div> <!-- Price display element -->
         <button class="add-to-cart-btn add-to-cart" data-id="{{ $product->id }}" data-quantity="1">Add to cart</button>
         <div class="cart-options" style="display: none;">
@@ -114,6 +124,7 @@
           <button class="increase">+</button>
         </div>
       </div>
+     </div>
     </div>
     <button class="btn btn-success w-100 add-to-cart" data-id="{{ $product->id }}" data-quantity="1">Add To Cart</button>
   </div>
@@ -134,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const cartOptions = product.querySelector('.cart-options');
       const quantitySpan = product.querySelector('.quantity');
       const priceDisplay = product.querySelector('.price-display'); // New price display element
+      
 
       // Fetch current cart state from the server
       $.ajax({
@@ -324,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <!-- OLD CODE -->
-<div class="product-grid container">
+<!-- <div class="product-grid container">
   @foreach ($products as $product)
     <div class="showcase">
       <div class="showcase-banner">
@@ -356,10 +368,10 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
   @endforeach
-</div>
+</div> -->
 
 
-<div class="container mt-3">{{ $products->links('pagination::bootstrap-5') }}</div>
+<!-- <div class="container mt-3">{{ $products->links('pagination::bootstrap-5') }}</div> -->
 
 @extends('re_usable_users.sidebar')
 @extends('re_usable_users.footer')
