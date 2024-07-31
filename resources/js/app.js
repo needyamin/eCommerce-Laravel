@@ -162,6 +162,15 @@ $(document).ready(function() {
         addToCart(productId, quantity);
     });
 
+    // Event listener for add to cart buttons
+    $(document).on('click', '.add-to-cart-new', function() {
+            const productId = $(this).data('id');
+            const quantity = $(this).data('quantity');
+            addToCart(productId, quantity);
+    });
+    
+
+
     // Event listener for add to watchlist buttons
     $(document).on('click', '.add-to-watchlist', function() {
         const productId = $(this).data('id');
