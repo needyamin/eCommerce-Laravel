@@ -6,11 +6,9 @@
 
 @section('shoping-cart-scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@vite('resources/js/checkout.js')
 <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 @endsection
-
-
-
 
 
 
@@ -104,6 +102,122 @@
 }
 
   </style>
+
+
+
+
+
+
+
+
+
+
+<!-- Code Sidebar Start -->
+
+<style>
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 10;
+            top: 0;
+            right: 0; 
+            background-color: white;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            border-left: 1px solid #ddd;
+        }
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #333;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 10px; /* Position close button on the left side of the sidebar */
+            font-size: 36px;
+            margin-right: 50px;
+        }
+        .openbtn {
+            position: fixed;
+            right: 20px; 
+            top: 50%;
+            transform: translateY(-50%); 
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 2; 
+            background-color: #f1f1f1; 
+            padding: 10px;
+            border-radius: 5px; 
+        }
+        #main {
+            padding: 16px;
+        }
+        /* Hide the openbtn on mobile view */
+        @media screen and (max-width: 768px) {
+            .openbtn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+ <div class="container">
+    <h2>Cart</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items"></tbody>
+        </table>
+    </div>
+
+    <h3>Total: $<span id="cart-total">0.00</span> bdt</h3>
+    <button class="btn btn-success" id="checkout">Checkout</button>
+
+
+
+</div>
+ </div>
+</div>
+
+<div id="main">
+  <a id="openbtn" class="openbtn" onclick="openNav()">☰</a>
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "450px";
+        document.getElementById("openbtn").style.display = "none";
+    }
+    
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("openbtn").style.display = "block";
+    }
+</script>
+
+<!-- Code Sidebar end -->
+
+
 
 
 
